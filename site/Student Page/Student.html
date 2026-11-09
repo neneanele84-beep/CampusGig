@@ -16,7 +16,10 @@
         window.location.replace('../Login/Login Page.html');
         return;
     }
-    if (user.status === 'Suspended' || user.emailVerified !== true) {
+    const verificationSkipped = sessionStorage.getItem(
+        `campusgig-${user.role}-${user.id}-verification-skipped`
+    ) === 'true';
+    if (user.status === 'Suspended' || (user.emailVerified !== true && !verificationSkipped)) {
         window.location.replace('../Verification.html');
     }
 })();
@@ -172,7 +175,7 @@
         </div>
     </aside>
 </main>
-<script>const cgUser=JSON.parse(localStorage.getItem('campusgig-current-user')||'{}');if(cgUser.role!=='student'||!cgUser.id){window.location.replace('../Login/Login Page.html');}else if(cgUser.status==='Suspended'||cgUser.emailVerified!==true){window.location.replace('../Verification.html');}</script>
+<script>const cgUser=JSON.parse(localStorage.getItem('campusgig-current-user')||'{}');if(cgUser.role!=='student'||!cgUser.id){window.location.replace('../Login/Login Page.html');}else if(cgUser.status==='Suspended'||(cgUser.emailVerified!==true&&sessionStorage.getItem(`campusgig-${cgUser.role}-${cgUser.id}-verification-skipped`)!=='true')){window.location.replace('../Verification.html');}</script>
 </body>
 <script src="student.js"></script>
 <script src="student-profile.js"></script>

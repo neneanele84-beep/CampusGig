@@ -1,4 +1,3 @@
-
 const API_URL = 'https://campusgig-jf2e.onrender.com';
 
 const user = JSON.parse(
@@ -215,6 +214,10 @@ $('continueBtn').onclick = () => {
 
 $('continueUnverifiedBtn').onclick = () => {
   if (!user.emailVerified && user.status !== 'Suspended') {
+    sessionStorage.setItem(
+      `campusgig-${role}-${user.id}-verification-skipped`,
+      'true'
+    );
     window.location.href = page;
   }
 };

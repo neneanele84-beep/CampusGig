@@ -9,7 +9,8 @@
 (function(){
     const user=JSON.parse(localStorage.getItem('campusgig-current-user')||'{}');
     if(user.role!=='employer'||!user.id){window.location.replace('../Login/Login Page.html');return;}
-    if(user.status==='Suspended'||user.emailVerified!==true){window.location.replace('../Verification.html');}
+    const verificationSkipped=sessionStorage.getItem(`campusgig-${user.role}-${user.id}-verification-skipped`)==='true';
+    if(user.status==='Suspended'||(user.emailVerified!==true&&!verificationSkipped)){window.location.replace('../Verification.html');}
 })();
 </script>
 </head>
@@ -376,7 +377,7 @@
 <script>
     const campusGigUser = JSON.parse(localStorage.getItem('campusgig-current-user') || '{}');
     if (campusGigUser.role !== 'employer' || !campusGigUser.id) { window.location.href = '../Login/Login Page.html'; }
-    else if (campusGigUser.status === 'Suspended' || !campusGigUser.emailVerified) { window.location.href = '../Verification.html'; }
+    else if (campusGigUser.status === 'Suspended' || (!campusGigUser.emailVerified && sessionStorage.getItem(`campusgig-${campusGigUser.role}-${campusGigUser.id}-verification-skipped`) !== 'true')) { window.location.href = '../Verification.html'; }
     const API_URL = "https://campusgig-jf2e.onrender.com";
     const LOGIN_PAGE = "../Login/Login Page.html";
     let currentUser = {};
