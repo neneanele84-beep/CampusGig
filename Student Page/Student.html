@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusGig | Student Dashboard</title>
+    <link rel="stylesheet" href="student.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<script>
+(function () {
+    const user = JSON.parse(localStorage.getItem('campusgig-current-user') || '{}');
+    if (user.role !== 'student' || !user.id) {
+        window.location.replace('../Login/Login Page.html');
+        return;
+    }
+    if (user.status === 'Suspended' || user.emailVerified !== true) {
+        window.location.replace('../Verification.html');
+    }
+})();
+</script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <h1>CampusGig</h1>
+        </div>
+
+        <div class="search-container">
+                <input type="text" placeholder="Search jobs, companies, skills...">
+                <button class="search-btn"><span class="material-symbols-outlined">search</span></button>
+            </div>
+            <div class="navbar-actions">
+                <nav class="nav-links">
+                    <a href="#find-work" class="nav-link">Find Work</a>
+                    <a href="#track" class="nav-link">Track Application</a>
+                </nav>
+                <div class="notification-wrapper">
+                    <button class="notification-btn" title="Notifications" aria-expanded="false">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="notification-badge" id="notification-badge">3</span>
+                    </button>
+                    <div class="notification-dropdown" id="notification-dropdown">
+                        <div class="notification-header">
+                            <h4>Messages</h4>
+                            <span id="notification-count">3 new</span>
+                        </div>
+                        <div id="notification-list"></div>
+                    </div>
+                </div>
+                <button class="profile-btn" title="Profile">
+                    <span class="material-symbols-outlined">account_circle</span>
+                </button>
+            </div>
+    </nav>
+
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="#dashboard" class="active"><span class="menu-icon">📊</span> Dashboard</a></li>
+            <li><a href="#browse"><span class="menu-icon">💼</span> Browse Gigs</a></li>
+            <li><a href="#applications"><span class="menu-icon">📝</span> Applications</a></li>
+            <li><a href="#saved"><span class="menu-icon">🔖</span> Saved Jobs</a></li>
+            <li><a href="#active-gigs"><span class="menu-icon">🔥</span> Active Gigs</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <section class="welcome-banner dashboard-only">
+            <div class="banner-content">
+                    <h2>Welcome, <span class="username">Student User</span>!</h2>
+                    <p>Thank you for trusting our service! We hope our services meet your expectations.</p>
+            </div>
+        </section>
+
+        <section class="stats-section dashboard-only">
+            <div class="stat-card">
+                <div class="stat-icon applications-icon">📝</div>
+                <div class="stat-content">
+                    <h3>Applications</h3>
+                    <p class="stat-number" id="applications-count">0</p>
+                    <span class="stat-change">No applications yet</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon active-icon">🔥</div>
+                <div class="stat-content">
+                    <h3>Active Gigs</h3>
+                    <p class="stat-number">0</p>
+                    <span class="stat-change">No active gigs yet</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon saved-icon">🔖</div>
+                <div class="stat-content">
+                    <h3>Saved Jobs</h3>
+                    <p class="stat-number">0</p>
+                    <span class="stat-change">No saved jobs yet</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="jobs-section" id="find-work">
+            <div class="jobs-heading">
+                <div>
+                    <p class="section-kicker">Fresh opportunities</p>
+                    <h2>Recommended gigs</h2>
+                </div>
+                <button class="filter-btn" type="button"><span class="material-symbols-outlined">tune</span> Best match</button>
+            </div>
+
+            <div class="job-list" id="job-list">
+                <article class="job-card" data-search="travel writer content editor creative writing editorial writing article writing content writing">
+                    <div class="job-card-topline">
+                        <span>Posted 47 minutes ago</span>
+                        <button class="save-job-btn" type="button" aria-label="Save Travel Writer job" aria-pressed="false"><span class="material-symbols-outlined">bookmark_border</span></button>
+                    </div>
+                    <h3>Travel Writer / Content Editor</h3>
+                    <p class="job-meta">R100 - R250/hr <span>•</span> Intermediate <span>•</span> Est. time: less than 2 week, 3+ hrs/week</p>
+                    <p class="job-description">We’re seeking an expert to edit and enhance founder-written stories for a travel blog. Refine existing content, improve flow and clarity, and turn raw narratives into polished, engaging pieces.</p>
+                    <div class="tag-list"><span>Creative Writing</span><span>Editorial Writing</span><span>Article Writing</span><span>Content Writing</span></div>
+                    <div class="job-footer"><span><span class="material-symbols-outlined">location_on</span> Richard's Bay</span><button class="apply-btn" type="button">View gig</button></div>
+                </article>
+
+                <article class="job-card" data-search="developmental editing proofreading medical writing editing health wellness mental health">
+                    <div class="job-card-topline">
+                        <span>Posted yesterday</span>
+                        <button class="save-job-btn" type="button" aria-label="Save Developmental editing job" aria-pressed="false"><span class="material-symbols-outlined">bookmark_border</span></button>
+                    </div>
+                    <h3>Developmental editing and proofreading</h3>
+                    <p class="job-meta">R180 - R250 <span>•</span> Intermediate <span>•</span> Est. time: Less than 1 week, less than 30 hrs/week</p>
+                    <p class="job-description">I have a draft manuscript approximately 92 pages and need help with editing and proofreading, formatting, so I can launch before the end of the year.</p>
+                    <div class="tag-list"><span>Editing &amp; Proofreading</span><span>Medical Writing</span><span>Medical Editing</span><span>Health &amp; Wellness</span><span>Mental Health</span></div>
+                    <div class="job-footer"><span><span class="material-symbols-outlined">location_on</span> Eskhawini</span><button class="apply-btn" type="button">View gig</button></div>
+                </article>
+
+                <article class="job-card" data-search="social media assistant marketing instagram video campus student">
+                    <div class="job-card-topline">
+                        <span>Posted 2 hours ago</span>
+                        <button class="save-job-btn" type="button" aria-label="Save Social Media Assistant job" aria-pressed="false"><span class="material-symbols-outlined">bookmark_border</span></button>
+                    </div>
+                    <h3>Social Media Assistant for a growing campus brand</h3>
+                    <p class="job-meta">R120 - R180 <span>•</span> Entry level <span>•</span> Est. time: 1 to 3 months, less than 5 hrs/week</p>
+                    <p class="job-description">Help plan weekly content, turn simple ideas into short videos, and keep our student-focused brand active across Instagram and TikTok.</p>
+                    <div class="tag-list"><span>Social Media</span><span>Content Strategy</span><span>Video Editing</span><span>Instagram</span></div>
+                    <div class="job-footer"><span><span class="material-symbols-outlined">location_on</span> Remote</span><button class="apply-btn" type="button">View gig</button></div>
+                </article>
+            </div>
+            <p class="empty-jobs" id="empty-jobs">No gigs match your search yet.</p>
+        </section>
+
+    <aside class="right-panel">
+        <div class="panel-card profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-info">
+                    <h3 class="profile-username">Student User</h3>
+                    <p class="profile-email"></p>
+                </div>
+            </div>
+            <a href="" class="edit-profile-btn">Edit Profile</a>
+            <button type="button" class="logout-btn" id="student-logout-btn">Log Out</button>
+        </div>
+
+        <div class="panel-card notifications-card">
+            <h3>Notifications</h3>
+            <div class="notifications-list" id="welcome-messages"></div>
+        </div>
+    </aside>
+</main>
+<script>const cgUser=JSON.parse(localStorage.getItem('campusgig-current-user')||'{}');if(cgUser.role!=='student'||!cgUser.id){window.location.replace('../Login/Login Page.html');}else if(cgUser.status==='Suspended'||cgUser.emailVerified!==true){window.location.replace('../Verification.html');}</script>
+</body>
+<script src="student.js"></script>
+<script src="student-profile.js"></script>
+<script src="active-gigs.js"></script>
+</html>

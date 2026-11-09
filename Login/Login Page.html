@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusGig | Login & Registration</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="login-style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo-container">
+            <div class="logo-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <h1>CampusGig</h1>
+        </div>
+    </nav>
+
+    <div class="login-wrapper">
+      <div class="login-card" id="login-view">
+        <h2>Welcome To CampusGig</h2>
+        <p id="login-intent" class="login-intent" aria-live="polite">Log in to continue to CampusGig.</p>
+        <form id="login-form">
+            <div class="input-group">
+                <select id="login-role" aria-label="Account type" required><option value="student">Student account</option><option value="employer">Employer account</option></select>
+                <input id="login-identifier" type="email" placeholder="Gmail or Outlook address" autocomplete="username" required>
+                <input id="login-password" type="password" placeholder="Password" autocomplete="current-password" required>
+            <button type="button" class="link-btn" onclick="showSection('forgot')">Forgot password?</button>
+            </div>
+            <button type="submit" class="btn-continue">Log In →</button>
+        </form>
+
+        <div class="divider"><span>New to CampusGig?</span></div>
+
+        <button class="btn-social btn-student" onclick="showSection('student')">Sign Up as a Student</button>
+        <button class="btn-social btn-employer" onclick="showSection('employer')">Post a Gig as Employer</button>
+        
+        <div id="login-message" class="message"></div>
+      </div>
+
+      <div class="register-section" id="student-register" style="display:none;">
+        <h3>Join as a Student</h3>
+        <form id="student-form" novalidate>
+              <div class="registration-grid">
+                <input id="student-first-name" name="firstName" type="text" placeholder="First name" autocomplete="given-name" minlength="2" maxlength="50" pattern="[A-Za-zÀ-ÖØ-öø-ÿ' -]+" required>
+                <input id="student-surname" name="surname" type="text" placeholder="Surname" autocomplete="family-name" minlength="2" maxlength="60" pattern="[A-Za-zÀ-ÖØ-öø-ÿ' -]+" required>
+                <label>Date of birth<input id="student-dob" name="dateOfBirth" type="date" required></label>
+                <label>Age (calculated automatically)<input id="student-age" name="age" type="number" readonly placeholder="Calculated from date of birth"></label>
+                <input id="student-email" name="email" type="email" placeholder="Email address" autocomplete="email" maxlength="254" required>
+                <label class="phone-field"><span>Contact number</span><span class="phone-input"><span class="phone-prefix" aria-hidden="true">+27</span><input id="student-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" aria-label="Contact number, 9 digits after +27" placeholder="821234567" pattern="[0-9]{9}" minlength="9" maxlength="9" title="Enter 9 digits after +27." required></span></label>
+                <input id="student-house-number" name="houseNumber" type="text" placeholder="House / unit number" maxlength="20" required>
+                <input id="student-street-name" name="streetName" type="text" placeholder="Street name" maxlength="100" required>
+                <input id="student-suburb" name="suburb" type="text" placeholder="Suburb" maxlength="80" required>
+                <label>City / town<select id="student-city" name="cityTown" required><option value="">Choose your area</option><option>Richards Bay</option><option>Empangeni</option><option>Esikhaleni</option><option>Ngwelezane</option><option>Nseleni</option><option>Felixton</option><option>KwaMbonambi</option><option>Other nearby area</option></select></label>
+                <input id="student-other-area" name="otherArea" type="text" placeholder="Specify nearby area" maxlength="80" hidden>
+                <input id="student-postal-code" name="postalCode" type="text" inputmode="numeric" placeholder="Postal code (4 digits)" pattern="[0-9]{4}" maxlength="4" required>
+                <label>Province<select id="student-province" name="province" required><option value="KwaZulu-Natal" selected>KwaZulu-Natal</option><option>Eastern Cape</option><option>Free State</option><option>Gauteng</option><option>Limpopo</option><option>Mpumalanga</option><option>Northern Cape</option><option>North West</option><option>Western Cape</option></select></label>
+                <label>Country<input id="student-country" name="country" type="text" value="South Africa" readonly required></label>
+                <label>Gender<select id="student-gender" name="gender" required><option value="">Select gender</option><option>Male</option><option>Female</option><option value="Custom">Custom</option></select></label>
+                <input id="student-custom-gender" name="customGender" type="text" placeholder="Describe your gender (optional)" maxlength="50" hidden>
+                <fieldset class="language-options" id="student-languages" tabindex="-1"><legend>Languages spoken (tick all that apply)</legend><label><input type="checkbox" name="languages" value="isiZulu"> isiZulu</label><label><input type="checkbox" name="languages" value="English"> English</label><label><input type="checkbox" name="languages" value="isiXhosa"> isiXhosa</label><label><input type="checkbox" name="languages" value="Afrikaans"> Afrikaans</label><label><input type="checkbox" name="languages" value="Sesotho"> Sesotho</label><label><input type="checkbox" name="languages" value="Setswana"> Setswana</label><label><input type="checkbox" name="languages" value="Sepedi"> Sepedi</label><label><input type="checkbox" name="languages" value="siSwati"> siSwati</label><label><input type="checkbox" name="languages" value="itsonga">itsonga</label><label><input type="checkbox" name="languages" value="Tshivenda"> Tshivenda</label><label><input type="checkbox" name="languages" value="isiNdebele"> isiNdebele</label><label><input type="checkbox" name="languages" value="Other"> Other</label></fieldset>
+                <label class="wide-field">University<input id="student-university" name="university" type="text" placeholder="University / institution" minlength="2" maxlength="120" required></label>
+              </div>
+
+          <input id="student-password" type="password" placeholder="Password" autocomplete="new-password" required>
+          <input id="student-confirm-password" type="password" placeholder="Confirm password" autocomplete="new-password" required>
+          <label for="student-security-question">Security question (used to reset your password)</label>
+          <select id="student-security-question" required><option value="">Choose a security question</option><option value="first_school">What was the name of your first school?</option><option value="first_pet">What was the name of your first pet?</option><option value="birth_city">In which city were you born?</option><option value="childhood_friend">What was the first name of a childhood friend?</option><option value="first_teacher">What was the surname of a teacher you remember?</option></select>
+          <input id="student-security-answer" type="text" placeholder="Your answer" autocomplete="off" minlength="2" maxlength="100" required>
+          <button type="submit" class="small-btn">Create Student Account</button><p id="student-message" class="message" aria-live="polite"></p>
+          <button type="button" class="link-btn" onclick="showSection('login')">Back to Login</button>
+        </form>
+      </div>
+      <div class="register-section" id="employer-register" style="display:none;">
+        <h3>Join as an Employer</h3>
+        <form id="employer-form" novalidate>
+              <div class="registration-grid">
+                <input id="employer-first-name" name="firstName" type="text" placeholder="First name" autocomplete="given-name" minlength="2" maxlength="50" pattern="[A-Za-zÀ-ÖØ-öø-ÿ' -]+" required>
+                <input id="employer-surname" name="surname" type="text" placeholder="Surname" autocomplete="family-name" minlength="2" maxlength="60" pattern="[A-Za-zÀ-ÖØ-öø-ÿ' -]+" required>
+                <label>Date of birth<input id="employer-dob" name="dateOfBirth" type="date" required></label>
+                <label>Age (calculated automatically)<input id="employer-age" name="age" type="number" readonly placeholder="Calculated from date of birth"></label>
+                <input id="employer-email" name="email" type="email" placeholder="Email address" autocomplete="email" maxlength="254" required>
+                <label class="phone-field"><span>Contact number</span><span class="phone-input"><span class="phone-prefix" aria-hidden="true">+27</span><input id="employer-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" aria-label="Contact number, 9 digits after +27" placeholder="821234567" pattern="[0-9]{9}" minlength="9" maxlength="9" title="Enter 9 digits after +27." required></span></label>
+                <input id="employer-house-number" name="houseNumber" type="text" placeholder="House / unit number" maxlength="20" required>
+                <input id="employer-street-name" name="streetName" type="text" placeholder="Street name" maxlength="100" required>
+                <input id="employer-suburb" name="suburb" type="text" placeholder="Suburb" maxlength="80" required>
+                <label>City / town<select id="employer-city" name="cityTown" required><option value="">Choose your area</option><option>Richards Bay</option><option>Empangeni</option><option>Esikhaleni</option><option>Ngwelezane</option><option>Nseleni</option><option>Felixton</option><option>KwaMbonambi</option><option>Other nearby area</option></select></label>
+                <input id="employer-other-area" name="otherArea" type="text" placeholder="Specify nearby area" maxlength="80" hidden>
+                <input id="employer-postal-code" name="postalCode" type="text" inputmode="numeric" placeholder="Postal code (4 digits)" pattern="[0-9]{4}" maxlength="4" required>
+                <label>Province<select id="employer-province" name="province" required><option value="KwaZulu-Natal" selected>KwaZulu-Natal</option><option>Eastern Cape</option><option>Free State</option><option>Gauteng</option><option>Limpopo</option><option>Mpumalanga</option><option>Northern Cape</option><option>North West</option><option>Western Cape</option></select></label>
+                <label>Country<input id="employer-country" name="country" type="text" value="South Africa" readonly required></label>
+                <label>Gender<select id="employer-gender" name="gender" required><option value="">Select gender</option><option>Male</option><option>Female</option><option value="Custom">Custom</option></select></label>
+                <input id="employer-custom-gender" name="customGender" type="text" placeholder="Describe your gender (optional)" maxlength="50" hidden>
+                <fieldset class="language-options" id="employer-languages" tabindex="-1"><legend>Languages spoken (tick all that apply)</legend><label><input type="checkbox" name="languages" value="isiZulu"> isiZulu</label><label><input type="checkbox" name="languages" value="English"> English</label><label><input type="checkbox" name="languages" value="isiXhosa"> isiXhosa</label><label><input type="checkbox" name="languages" value="Afrikaans"> Afrikaans</label><label><input type="checkbox" name="languages" value="Sesotho"> Sesotho</label><label><input type="checkbox" name="languages" value="Setswana"> Setswana</label><label><input type="checkbox" name="languages" value="Sepedi"> Sepedi</label><label><input type="checkbox" name="languages" value="siSwati"> siSwati</label><label><input type="checkbox" name="languages" value="itsonga">itsonga</label><label><input type="checkbox" name="languages" value="Tshivenda"> Tshivenda</label><label><input type="checkbox" name="languages" value="isiNdebele"> isiNdebele</label><label><input type="checkbox" name="languages" value="Other"> Other</label></fieldset>
+                <label class="wide-field">Business / organisation name<input id="employer-company" name="company" type="text" placeholder="Business or organisation name" minlength="2" maxlength="120" required></label>
+              </div>
+
+          <input id="employer-password" type="password" placeholder="Password" autocomplete="new-password" required>
+          <input id="employer-confirm-password" type="password" placeholder="Confirm password" autocomplete="new-password" required>
+          <label for="employer-security-question">Security question (used to reset your password)</label>
+          <select id="employer-security-question" required><option value="">Choose a security question</option><option value="first_school">What was the name of your first school?</option><option value="first_pet">What was the name of your first pet?</option><option value="birth_city">In which city were you born?</option><option value="childhood_friend">What was the first name of a childhood friend?</option><option value="first_teacher">What was the surname of a teacher you remember?</option></select>
+          <input id="employer-security-answer" type="text" placeholder="Your answer" autocomplete="off" minlength="2" maxlength="100" required>
+          <button type="submit" class="small-btn">Create Employer Account</button><p id="employer-message" class="message" aria-live="polite"></p>
+          <button type="button" class="link-btn" onclick="showSection('login')">Back to Login</button>
+        </form>
+      </div>
+      <div class="register-section" id="forgot-view" style="display:none;">
+        <h3>Reset your password</h3>
+        <div id="forgot-step-question">
+          <label for="reset-role">Account type</label>
+          <select id="reset-role"><option value="student">Student</option><option value="employer">Employer</option></select>
+          <input id="reset-email" type="email" placeholder="Registered Gmail or Outlook address" autocomplete="email" required>
+          <button type="button" class="small-btn" id="load-security-question">Continue</button>
+          <p id="reset-question-text" class="message"></p>
+          <input id="reset-answer" type="text" placeholder="Your security answer" style="display:none;">
+          <button type="button" class="small-btn" id="verify-security-answer" style="display:none;">Verify answer</button>
+        </div>
+        <div id="forgot-step-password" style="display:none;">
+          <input id="reset-new-password" type="password" placeholder="New password" autocomplete="new-password">
+          <input id="reset-confirm-password" type="password" placeholder="Confirm new password" autocomplete="new-password">
+          <button type="button" class="small-btn" id="save-new-password">Save new password</button>
+        </div>
+        <p id="forgot-message" class="message"></p>
+        <button type="button" class="link-btn" onclick="showSection('login')">Back to Login</button>
+      </div>
+
+
+      <div class="register-section" id="security-setup-view" style="display:none;">
+        <h3>Set your account recovery question</h3>
+        <p>Your existing account needs a security question before password recovery can be used.</p>
+        <input id="setup-email" type="email" readonly aria-label="Account email">
+        <input id="setup-password" type="password" placeholder="Confirm your current password" autocomplete="current-password" required>
+        <label for="setup-security-question">Choose a security question</label>
+        <select id="setup-security-question" required><option value="">Choose a security question</option><option value="first_school">What was the name of your first school?</option><option value="first_pet">What was the name of your first pet?</option><option value="birth_city">In which city were you born?</option><option value="childhood_friend">What was the first name of a childhood friend?</option><option value="first_teacher">What was the surname of a teacher you remember?</option></select>
+        <input id="setup-security-answer" type="text" placeholder="Your answer" autocomplete="off" required>
+        <button type="button" class="small-btn" id="save-security-setup">Save and continue</button>
+        <p id="setup-message" class="message"></p>
+      </div>
+    </div>
+
+    <!-- Link to the JS file -->
+    <style>.registration-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}.registration-grid input,.registration-grid select,.registration-grid label{width:100%;min-width:0}.registration-grid label{display:flex;flex-direction:column;gap:6px;font-size:13px}.registration-grid .phone-input{display:flex;align-items:center;border:1px solid #e2e8f0;border-radius:12px;background:var(--input-bg);overflow:hidden}.registration-grid .phone-prefix{padding:0 0 0 14px;color:#334155}.registration-grid .phone-input input{flex:1;margin:0;border:0;background:transparent}.registration-grid .wide-field{grid-column:1/-1}.registration-grid .language-options{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0;padding:14px;border:1px solid #e2e8f0;border-radius:12px}.registration-grid .language-options legend{padding:0 6px;font-size:13px;font-weight:600}.registration-grid .language-options label{display:flex;flex-direction:row;align-items:center;gap:8px;margin:0;font-size:13px}.registration-grid .language-options input[type=checkbox]{width:auto;margin:0}@media(max-width:600px){.registration-grid{grid-template-columns:1fr}.registration-grid .language-options{grid-template-columns:repeat(2,minmax(0,1fr))}}</style>
+    <script src="login-script.js"></script>
+</body>
+</html>

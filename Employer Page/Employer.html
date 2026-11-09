@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusGig - Employer Dashboard</title>
+    <link rel="stylesheet" href="Employer.css">
+<script>
+(function(){
+    const user=JSON.parse(localStorage.getItem('campusgig-current-user')||'{}');
+    if(user.role!=='employer'||!user.id){window.location.replace('../Login/Login Page.html');return;}
+    if(user.status==='Suspended'||user.emailVerified!==true){window.location.replace('../Verification.html');}
+})();
+</script>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>Campus<span>Gig</span></h2>
+        </div>
+
+        <nav class="tab-navigation">
+            <button type="button" class="tab-link active" data-tab="dashboard">Dashboard</button>
+            <button type="button" class="tab-link" data-tab="post-job">Post a Job</button>
+            <button type="button" class="tab-link" data-tab="manage-jobs">Manage Jobs</button>
+            <button type="button" class="tab-link" data-tab="applications">Applications</button>
+            <button type="button" class="tab-link" data-tab="profile">My Profile</button>
+        </nav>
+
+        <button class="logout-btn" type="button">Exit</button>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1 id="pageTitle">Employer Dashboard</h1>
+                <p id="pageSubtitle">Welcome to CampusGig. Manage your jobs and applications here.</p>
+            </div>
+
+            <div class="profile-icon">
+                👤
+            </div>
+        </header>
+
+        <section class="tab-panel active-panel" data-panel="dashboard">
+
+        <section class="dashboard-hero">
+            <div class="hero-copy">
+                <span class="hero-badge">EMPLOYER HUB</span>
+                <h2>Build opportunities. Find great student talent.</h2>
+                <p>CampusGig helps you post short-term jobs, manage applications and connect with students around Richards Bay, Empangeni and nearby areas.</p>
+                <div class="hero-actions">
+                    <button type="button" class="primary-btn" onclick="openTab('post-job')">Post Your First Job</button>
+                    <button type="button" class="secondary-btn" onclick="openTab('manage-jobs')">Manage Jobs</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-circle">💼</div>
+                <span>Local student talent</span>
+                <strong>Richards Bay • Empangeni</strong>
+            </div>
+        </section>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-icon">💼</div>
+                <div>
+                    <h3 id="totalJobs">0</h3>
+                    <p>Total Jobs</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div>
+                    <h3 id="activeJobs">0</h3>
+                    <p>Active Jobs</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div>
+                    <h3 id="applicationCount">0</h3>
+                    <p>Applications</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div>
+                    <h3 id="completedJobs">0</h3>
+                    <p>Completed Jobs</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="dashboard-guides">
+            <div class="guide-heading">
+                <div>
+                    <span class="section-kicker">HOW IT WORKS</span>
+                    <h2>Everything you need, in one place</h2>
+                    <p>Follow these simple steps to get your opportunity in front of students.</p>
+                </div>
+            </div>
+            <div class="guide-grid">
+                <article class="guide-card">
+                    <span class="guide-number">01</span>
+                    <div class="guide-icon">📝</div>
+                    <h3>Post a Job</h3>
+                    <p>Add the job details, payment, skills and application deadline. Choose Richards Bay, Empangeni or a nearby area.</p>
+                    <button type="button" class="guide-link" onclick="openTab('post-job')">Start posting →</button>
+                </article>
+                <article class="guide-card">
+                    <span class="guide-number">02</span>
+                    <div class="guide-icon">🎯</div>
+                    <h3>Find Local Talent</h3>
+                    <p>Students can discover your opportunity, while local applicants can be prioritised by proximity to your job area.</p>
+                    <button type="button" class="guide-link" onclick="openTab('applications')">View applications →</button>
+                </article>
+                <article class="guide-card">
+                    <span class="guide-number">03</span>
+                    <div class="guide-icon">⚙️</div>
+                    <h3>Manage Everything</h3>
+                    <p>Edit job details, change deadlines, remove jobs and keep your opportunities up to date whenever you need to.</p>
+                    <button type="button" class="guide-link" onclick="openTab('manage-jobs')">Manage jobs →</button>
+                </article>
+            </div>
+            <div class="quick-guide">
+                <div class="quick-guide-icon">💡</div>
+                <div>
+                    <h3>New to CampusGig?</h3>
+                    <p>Start by completing <button type="button" class="inline-link" onclick="openTab('profile')">My Profile</button>, then post your first opportunity. Keeping your business information up to date helps students know who they are applying to.</p>
+                </div>
+            </div>
+        </section>
+
+        </section>
+
+        <section class="content-section tab-panel" id="post-job" data-panel="post-job">
+
+            <div class="section-title">
+                <div>
+                    <h2>Post a New Job</h2>
+                    <p>Create a short-term opportunity for students.</p>
+                </div>
+            </div>
+
+            <form id="jobForm">
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="title">Job Title</label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="e.g. Social Media Assistant"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <select id="location" name="location" required>
+                            <option value="">Select job area</option>
+                            <option value="Richards Bay">Richards Bay</option>
+                            <option value="Empangeni">Empangeni</option>
+                            <option value="Nearby Area">Nearby Area</option>
+                        </select>
+                        <input
+                            type="text"
+                            id="nearbyLocation"
+                            name="nearbyLocation"
+                            placeholder="Enter nearby area"
+                            class="conditional-location"
+                            hidden
+                        >
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Job Description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        placeholder="Describe the job and responsibilities..."
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="skills">Required Skills</label>
+                        <input
+                            type="text"
+                            id="skills"
+                            name="skills"
+                            placeholder="e.g. Computer skills, communication"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="payment">Payment (R)</label>
+                        <input
+                            type="number"
+                            id="payment"
+                            name="payment"
+                            placeholder="250"
+                            min="0"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="startDate">Job start date</label>
+                        <input type="date" id="startDate" name="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">Job end date</label>
+                        <input type="date" id="endDate" name="endDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deadline">Application Deadline</label>
+                        <input
+                            type="date"
+                            id="deadline"
+                            name="deadline"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <button type="submit" class="primary-btn">
+                    Post Job
+                </button>
+
+                <p id="message"></p>
+
+            </form>
+
+        </section>
+
+        <section class="content-section tab-panel" id="manage-jobs" data-panel="manage-jobs">
+
+            <div class="section-title">
+                <div>
+                    <h2>Manage Jobs</h2>
+                    <p>View and manage your posted opportunities.</p>
+                </div>
+            </div>
+
+            <div id="jobsContainer">
+
+                <div class="empty-state">
+                    <div class="empty-icon">💼</div>
+                    <h3>No jobs posted yet</h3>
+                    <p>Your posted jobs will appear here.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="content-section tab-panel" id="applications" data-panel="applications">
+
+            <div class="section-title">
+                <div>
+                    <h2>Applications</h2>
+                    <p>Review students who applied for your jobs.</p>
+                </div>
+            </div>
+
+            <div id="applicationsContainer">
+                <div class="empty-state">
+                    <div class="empty-icon">👥</div>
+                    <h3>Loading applications</h3>
+                    <p>Applications will appear here when students apply.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="content-section tab-panel" id="profile" data-panel="profile">
+
+            <div class="section-title">
+                <div>
+                    <h2>Employer Profile</h2>
+                    <p>Manage your business information.</p>
+                </div>
+            </div>
+
+            <div id="profileView" class="profile-view" hidden>
+                <div class="profile-view-header">
+                    <div class="profile-avatar" id="profileAvatar">B</div>
+                    <div>
+                        <span class="profile-status">PROFILE SAVED</span>
+                        <h3 id="savedBusinessName">Your Business</h3>
+                        <p id="savedBusinessType">Business type</p>
+                    </div>
+                    <button type="button" class="secondary-btn profile-edit-btn">Edit Profile</button>
+                </div>
+                <div class="profile-info-grid">
+                    <div><span>Email</span><strong id="savedEmail">-</strong></div>
+                    <div><span>Phone</span><strong id="savedPhone">-</strong></div>
+                    <div><span>Location</span><strong id="savedLocation">-</strong></div>
+                </div>
+            </div>
+
+            <form id="profileForm">
+                <div class="profile-form-heading">
+                    <div>
+                        <span class="section-kicker">BUSINESS INFORMATION</span>
+                        <h3 id="profileFormTitle">Create your employer profile</h3>
+                        <p>Save your details once and edit them whenever your business information changes.</p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="businessName">Business Name</label>
+                        <input type="text" id="businessName" name="businessName" placeholder="Business name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="businessType">Business Type</label>
+                        <input type="text" id="businessType" name="businessType" placeholder="e.g. Small Business" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Phone number" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="businessLocation">Business Location</label>
+                    <select id="businessLocation" name="businessLocation" required>
+                        <option value="">Select business area</option>
+                        <option value="Richards Bay">Richards Bay</option>
+                        <option value="Empangeni">Empangeni</option>
+                        <option value="Nearby Area">Nearby Area</option>
+                    </select>
+                </div>
+                <div class="profile-form-actions">
+                    <button type="submit" class="primary-btn" id="profileSaveBtn">Save Profile</button>
+                    <button type="button" class="secondary-btn" id="profileCancelBtn" onclick="cancelProfileEdit()" hidden>Cancel</button>
+                </div>
+                <p id="profileMessage"></p>
+            </form>
+
+        </section>
+
+    </main>
+
+<script>
+    const campusGigUser = JSON.parse(localStorage.getItem('campusgig-current-user') || '{}');
+    if (campusGigUser.role !== 'employer' || !campusGigUser.id) { window.location.href = '../Login/Login Page.html'; }
+    else if (campusGigUser.status === 'Suspended' || !campusGigUser.emailVerified) { window.location.href = '../Verification.html'; }
+    const API_URL = "https://campusgig-jf2e.onrender.com";
+    const LOGIN_PAGE = "../Login/Login Page.html";
+    let currentUser = {};
+
+    try {
+        currentUser = JSON.parse(localStorage.getItem("campusgig-current-user") || "{}");
+    } catch (error) {
+        currentUser = {};
+    }
+
+    if (!currentUser.id || currentUser.role !== "employer" || !currentUser.email) {
+        window.location.replace(LOGIN_PAGE);
+        throw new Error("Employer login required");
+    }
+
+    const tabLinks = document.querySelectorAll(".tab-link");
+    const tabPanels = document.querySelectorAll(".tab-panel");
+
+    function openTab(tabName) {
+        tabLinks.forEach(link => {
+            link.classList.toggle("active", link.dataset.tab === tabName);
+        });
+
+        tabPanels.forEach(panel => {
+            panel.classList.toggle("active-panel", panel.dataset.panel === tabName);
+        });
+
+        const titles = {
+            dashboard: ["Employer Dashboard", "Welcome to CampusGig. Manage your jobs and applications here."],
+            "post-job": ["Post a Job", "Create a short-term opportunity for students."],
+            "manage-jobs": ["Manage Jobs", "Update, review or remove your posted opportunities."],
+            applications: ["Applications", "Review students who applied for your jobs."],
+            profile: ["My Profile", "Manage your business information."]
+        };
+
+        const title = titles[tabName] || titles.dashboard;
+        document.getElementById("pageTitle").textContent = title[0];
+        document.getElementById("pageSubtitle").textContent = title[1];
+        history.replaceState(null, "", `#${tabName}`);
+    }
+
+    tabLinks.forEach(link => {
+        link.addEventListener("click", () => openTab(link.dataset.tab));
+    });
+
+    const initialTab = location.hash.replace("#", "");
+    openTab(["dashboard", "post-job", "manage-jobs", "applications", "profile"].includes(initialTab) ? initialTab : "dashboard");
+    const today = new Date();
+    const todayString = today.toISOString().split("T")[0];
+
+    const locationSelect = document.getElementById("location");
+    const nearbyLocation = document.getElementById("nearbyLocation");
+    const deadlineInput = document.getElementById("deadline");
+
+    deadlineInput.min = todayString;
+    if (!deadlineInput.value) {
+        deadlineInput.value = todayString;
+    }
+
+    locationSelect.addEventListener("change", function() {
+        const isNearby = this.value === "Nearby Area";
+        nearbyLocation.hidden = !isNearby;
+        nearbyLocation.required = isNearby;
+
+        if (!isNearby) {
+            nearbyLocation.value = "";
+        }
+    });
+
+    function getJobLocation() {
+        if (locationSelect.value === "Nearby Area") {
+            return nearbyLocation.value.trim();
+        }
+
+        return locationSelect.value;
+    }
+
+    function setJobLocation(location) {
+        const normalised = String(location || "").trim().toLowerCase();
+
+        if (normalised === "richards bay") {
+            locationSelect.value = "Richards Bay";
+            nearbyLocation.hidden = true;
+            nearbyLocation.required = false;
+            nearbyLocation.value = "";
+            return;
+        }
+
+        if (normalised === "empangeni") {
+            locationSelect.value = "Empangeni";
+            nearbyLocation.hidden = true;
+            nearbyLocation.required = false;
+            nearbyLocation.value = "";
+            return;
+        }
+
+        locationSelect.value = "Nearby Area";
+        nearbyLocation.hidden = false;
+        nearbyLocation.required = true;
+        nearbyLocation.value = location;
+    }
+
+    document.getElementById("jobForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const message = document.getElementById("message");
+        const location = getJobLocation();
+
+        if (!location) {
+            message.textContent = "Please select Richards Bay, Empangeni, or enter a nearby area.";
+            message.className = "error-message";
+            return;
+        }
+
+        const startDateValue = document.getElementById("startDate").value;
+        const endDateValue = document.getElementById("endDate").value;
+        if (!startDateValue || !endDateValue || endDateValue < startDateValue) {
+            message.textContent = "Choose valid job dates. The end date cannot be before the start date.";
+            message.className = "error-message";
+            return;
+        }
+
+        if (deadlineInput.value < todayString) {
+            message.textContent = "The application deadline cannot be in the past.";
+            message.className = "error-message";
+            return;
+        }
+
+        const jobData = {
+            title: document.getElementById("title").value.trim(),
+            location,
+            description: document.getElementById("description").value.trim(),
+            skills: document.getElementById("skills").value.trim(),
+            payment: document.getElementById("payment").value,
+            startDate: document.getElementById("startDate").value,
+            endDate: document.getElementById("endDate").value,
+            duration: `${document.getElementById("startDate").value} to ${document.getElementById("endDate").value}`,
+            deadline: deadlineInput.value,
+            employerId: currentUser.id || "",
+            employerName: currentUser.company || currentUser.name || "",
+            employerEmail: currentUser.email || ""
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/api/jobs`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(jobData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                message.textContent = data.message || "Job posted successfully!";
+                message.className = "success-message";
+                this.reset();
+                deadlineInput.min = todayString;
+                deadlineInput.value = todayString;
+                nearbyLocation.hidden = true;
+                nearbyLocation.required = false;
+                loadJobs();
+            } else {
+                message.textContent = data.message || "Failed to post job.";
+                message.className = "error-message";
+            }
+        } catch (error) {
+            message.textContent = "Could not connect to the CampusGig server.";
+            message.className = "error-message";
+        }
+    });
+
+    let savedProfile = null;
+
+    function profilePayload() {
+        return {
+            id: currentUser.id || "",
+            originalEmail: savedProfile?.email || document.getElementById("email").value.trim(),
+            businessName: document.getElementById("businessName").value.trim(),
+            businessType: document.getElementById("businessType").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            businessLocation: document.getElementById("businessLocation").value
+        };
+    }
+
+    function showProfileView(profile) {
+        savedProfile = profile;
+        document.getElementById("profileView").hidden = false;
+        document.getElementById("profileForm").hidden = true;
+        document.getElementById("savedBusinessName").textContent = profile.businessName || "Your Business";
+        document.getElementById("savedBusinessType").textContent = profile.businessType || "Business";
+        document.getElementById("savedEmail").textContent = profile.email || "-";
+        document.getElementById("savedPhone").textContent = profile.phone || "-";
+        document.getElementById("savedLocation").textContent = profile.businessLocation || "-";
+        document.getElementById("profileAvatar").textContent = (profile.businessName || "B").charAt(0).toUpperCase();
+        localStorage.setItem("campusGigEmployerProfile", JSON.stringify(profile));
+    }
+
+    function fillProfileForm(profile) {
+        document.getElementById("businessName").value = profile.businessName || "";
+        document.getElementById("businessType").value = profile.businessType || "";
+        document.getElementById("email").value = profile.email || "";
+        document.getElementById("phone").value = profile.phone || "";
+        document.getElementById("businessLocation").value = profile.businessLocation || "";
+    }
+
+    function editProfile() {
+        document.getElementById("profileView").hidden = true;
+        document.getElementById("profileForm").hidden = false;
+        document.getElementById("profileFormTitle").textContent = "Edit your employer profile";
+        document.getElementById("profileSaveBtn").textContent = "Save Changes";
+        document.getElementById("profileCancelBtn").hidden = false;
+        fillProfileForm(savedProfile || {});
+    }
+
+    function cancelProfileEdit() {
+        if (savedProfile) {
+            showProfileView(savedProfile);
+        } else {
+            document.getElementById("profileForm").reset();
+        }
+    }
+
+    document.getElementById("profileForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        const profileMessage = document.getElementById("profileMessage");
+        const profile = profilePayload();
+
+        try {
+            const response = await fetch(`${API_URL}/api/employers/profile`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(profile)
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                profileMessage.textContent = data.message || "Could not save profile.";
+                profileMessage.className = "error-message";
+                return;
+            }
+
+            const saved = data.employer?.profile || profile;
+            profileMessage.textContent = "Profile saved successfully.";
+            profileMessage.className = "success-message";
+            showProfileView(saved);
+        } catch (error) {
+            localStorage.setItem("campusGigEmployerProfile", JSON.stringify(profile));
+            profileMessage.textContent = "Profile saved on this device. Start the backend to sync it to CampusGig.";
+            profileMessage.className = "success-message";
+            showProfileView(profile);
+        }
+    });
+
+    async function loadProfile() {
+        try {
+            if (currentUser.id || currentUser.email) {
+                const query = currentUser.id
+                    ? `?id=${encodeURIComponent(currentUser.id)}`
+                    : `?email=${encodeURIComponent(currentUser.email || "")}`;
+                const response = await fetch(`${API_URL}/api/employers/profile${query}`);
+                const data = await response.json();
+                if (response.ok && data.employer) {
+                    const profile = data.employer.profile || {
+                        businessName: data.employer.company || currentUser.company || "",
+                        email: data.employer.email || currentUser.email || "",
+                        phone: data.employer.cell || currentUser.phone || ""
+                    };
+                    savedProfile = profile;
+                    localStorage.setItem("campusGigEmployerProfile", JSON.stringify(profile));
+                    showProfileView(profile);
+                    return;
+                }
+            }
+        } catch (error) {}
+        const local = localStorage.getItem("campusGigEmployerProfile");
+        if (local) {
+            try {
+                const profile = JSON.parse(local);
+                savedProfile = profile;
+                showProfileView(profile);
+            } catch (error) {}
+        }
+    }
+
+    document.querySelector(".logout-btn").addEventListener("click", function() {
+        localStorage.removeItem("campusgig-current-user");
+        localStorage.removeItem("campusGigEmployerProfile");
+        window.location.href = LOGIN_PAGE;
+    });
+
+    async function loadJobs() {
+        try {
+            const response = await fetch(`${API_URL}/api/jobs`);
+            const data = await response.json();
+
+            if (data.success && Array.isArray(data.jobs)) {
+                displayJobs(data.jobs);
+                updateStatistics(data.jobs);
+            }
+        } catch (error) {
+            document.getElementById("jobsContainer").innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">⚠️</div>
+                    <h3>Unable to load jobs</h3>
+                    <p>Make sure the CampusGig backend is running on port 3000.</p>
+                </div>
+            `;
+        }
+    }
+
+    function displayApplications(applications) {
+        const container = document.getElementById("applicationsContainer");
+
+        if (applications.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">👥</div>
+                    <h3>No applications yet</h3>
+                    <p>Applications will appear here when students apply.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = applications.map(application => {
+            const jobTitle = application.job?.title || application.gigTitle || "Unknown job";
+            const skills = Array.isArray(application.skills) && application.skills.length
+                ? application.skills.join(", ")
+                : "Not provided";
+
+            return `
+                <article class="job-card">
+                    <div class="job-card-header">
+                        <div>
+                            <span class="job-status">${escapeHtml(application.status || "Submitted")}</span>
+                            <h3>${escapeHtml(application.name)}</h3>
+                            <p>${escapeHtml(jobTitle)}</p>
+                        </div>
+                        <span class="job-status">${escapeHtml(formatApplicationDate(application.submittedAt))}</span>
+                    </div>
+                    <div class="job-details">
+                        <p><strong>Email:</strong> ${escapeHtml(application.email)}</p>
+                        <p><strong>Phone:</strong> ${escapeHtml(application.phone)}</p>
+                        <p><strong>Location:</strong> ${escapeHtml(application.postalAddress || "Not provided")}</p>
+                        <p><strong>Skills:</strong> ${escapeHtml(skills)}</p>
+                        <p><strong>Current position:</strong> ${escapeHtml(application.currentPosition || "Not provided")}</p>
+                        <p><strong>Availability:</strong> ${escapeHtml(application.availabilityNote || "Not provided")}</p>
+                        <p><strong>Proximity:</strong> ${escapeHtml(application.proximity?.proximity || "Location not verified")}${application.proximity?.distanceKm != null ? ` (${escapeHtml(application.proximity.distanceKm)} km)` : ""}</p>
+                    </div>
+                    <div class="application-actions">
+                        <button type="button" class="secondary-btn" onclick="updateApplicationStatus('${escapeHtml(application.id)}','Shortlisted')">Shortlist</button>
+                        <button type="button" class="primary-btn" onclick="updateApplicationStatus('${escapeHtml(application.id)}','Accepted')">Hire</button>
+                        <button type="button" class="danger-btn" onclick="updateApplicationStatus('${escapeHtml(application.id)}','Rejected')">Reject</button>
+                    </div>
+                </article>
+            `;
+        }).join("");
+    }
+
+    async function updateApplicationStatus(id, status) {
+        try {
+            const response = await fetch(`${API_URL}/api/applications/${encodeURIComponent(id)}/status`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                alert(data.message || "Could not update application.");
+                return;
+            }
+            await loadApplications();
+        } catch (error) {
+            alert("Could not connect to the CampusGig server.");
+        }
+    }
+
+    async function loadApplications() {
+        try {
+            const response = await fetch(`${API_URL}/api/applications`);
+            const data = await response.json();
+
+            if (data.success && Array.isArray(data.applications)) {
+                displayApplications(data.applications);
+            }
+        } catch (error) {
+            document.getElementById("applicationsContainer").innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">⚠️</div>
+                    <h3>Unable to load applications</h3>
+                    <p>Make sure the CampusGig backend is running on port 3000.</p>
+                </div>
+            `;
+        }
+    }
+
+    function formatApplicationDate(dateValue) {
+        const date = new Date(dateValue);
+        if (Number.isNaN(date.getTime())) return "Recently";
+        return date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function displayJobs(jobs) {
+        const jobsContainer = document.getElementById("jobsContainer");
+
+        if (jobs.length === 0) {
+            jobsContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">💼</div>
+                    <h3>No jobs posted yet</h3>
+                    <p>Your posted jobs will appear here.</p>
+                </div>
+            `;
+            return;
+        }
+
+        jobsContainer.innerHTML = jobs.map(job => `
+            <article class="job-card" id="job-card-${escapeHtml(job.id)}">
+                <div class="job-card-header">
+                    <div>
+                        <span class="job-status">${escapeHtml(job.status || "Active")}</span>
+                        <h3>${escapeHtml(job.title)}</h3>
+                    </div>
+                    <div class="job-actions">
+                        <button type="button" class="secondary-btn" onclick="showEditJob('${escapeHtml(job.id)}')">Edit</button>
+                        <button type="button" class="danger-btn" onclick="deleteJob('${escapeHtml(job.id)}')">Delete</button>
+                    </div>
+                </div>
+
+                <div class="job-details">
+                    <p><strong>Location:</strong> ${escapeHtml(job.location)}</p>
+                    <p><strong>Description:</strong> ${escapeHtml(job.description)}</p>
+                    <p><strong>Skills:</strong> ${escapeHtml(job.skills)}</p>
+                    <p><strong>Payment:</strong> R${escapeHtml(job.payment)}</p>
+                    <p><strong>Duration:</strong> ${escapeHtml(job.duration)}</p>
+                    <p><strong>Deadline:</strong> ${escapeHtml(job.deadline)}</p>
+                </div>
+
+                <div class="edit-job-panel" id="edit-${escapeHtml(job.id)}" hidden>
+                    <h4>Edit Job</h4>
+                    <form onsubmit="saveEditedJob(event, '${escapeHtml(job.id)}')">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Job Title</label>
+                                <input name="title" value="${escapeHtml(job.title)}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input name="location" value="${escapeHtml(job.location)}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" rows="4" required>${escapeHtml(job.description)}</textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Required Skills</label>
+                                <input name="skills" value="${escapeHtml(job.skills)}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Payment (R)</label>
+                                <input name="payment" type="number" min="0" value="${escapeHtml(job.payment)}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Start date</label>
+                                <input name="startDate" type="date" value="${escapeHtml(job.startDate || "")}" required>
+                                <label>End date</label>
+                                <input name="endDate" type="date" value="${escapeHtml(job.endDate || "")}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Application Deadline</label>
+                                <input name="deadline" type="date" min="${todayString}" value="${escapeHtml(job.deadline)}" required>
+                            </div>
+                        </div>
+
+                        <div class="edit-actions">
+                            <button type="submit" class="primary-btn">Save Changes</button>
+                            <button type="button" class="secondary-btn" onclick="hideEditJob('${escapeHtml(job.id)}')">Cancel</button>
+                        </div>
+                        <p class="edit-message" id="edit-message-${escapeHtml(job.id)}"></p>
+                    </form>
+                </div>
+            </article>
+        `).join("");
+    }
+
+    function showEditJob(id) {
+        const panel = document.getElementById(`edit-${id}`);
+        if (panel) panel.hidden = false;
+    }
+
+    function hideEditJob(id) {
+        const panel = document.getElementById(`edit-${id}`);
+        if (panel) panel.hidden = true;
+    }
+
+    async function saveEditedJob(event, id) {
+        event.preventDefault();
+
+        const form = event.target;
+        const message = document.getElementById(`edit-message-${id}`);
+        const deadline = form.elements.deadline.value;
+
+        if (deadline < todayString) {
+            message.textContent = "The application deadline cannot be in the past.";
+            message.className = "edit-message error-message";
+            return;
+        }
+
+        const jobData = {
+            title: form.elements.title.value.trim(),
+            location: form.elements.location.value.trim(),
+            description: form.elements.description.value.trim(),
+            skills: form.elements.skills.value.trim(),
+            payment: form.elements.payment.value,
+            startDate: form.elements.startDate.value,
+            endDate: form.elements.endDate.value,
+            duration: `${form.elements.startDate.value} to ${form.elements.endDate.value}`,
+            deadline
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/api/jobs/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(jobData)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                message.textContent = data.message || "Could not update job.";
+                message.className = "edit-message error-message";
+                return;
+            }
+
+            message.textContent = "Job updated successfully.";
+            message.className = "edit-message success-message";
+            await loadJobs();
+        } catch (error) {
+            message.textContent = "Could not connect to the CampusGig server.";
+            message.className = "edit-message error-message";
+        }
+    }
+
+    async function deleteJob(id) {
+        const confirmed = confirm("Are you sure you want to delete this job? This cannot be undone.");
+
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(`${API_URL}/api/jobs/${id}`, {
+                method: "DELETE"
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.message || "Could not delete job.");
+                return;
+            }
+
+            await loadJobs();
+        } catch (error) {
+            alert("Could not connect to the CampusGig server.");
+        }
+    }
+
+    function updateStatistics(jobs) {
+        document.getElementById("totalJobs").textContent = jobs.length;
+
+        const activeJobs = jobs.filter(job => job.status !== "Completed").length;
+        document.getElementById("activeJobs").textContent = activeJobs;
+
+        const completedJobs = jobs.filter(job => job.status === "Completed").length;
+        document.getElementById("completedJobs").textContent = completedJobs;
+    }
+
+    loadJobs();
+    loadApplications();
+    loadProfile();
+</script>
+
+<script src="employer-profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+const express=require("express"); const c=require("../controllers/studentController"); const router=express.Router(); router.post("/register",c.registerStudent); router.post("/login",c.loginStudent); router.get("/profile",c.getProfile); router.put("/profile",c.updateProfile); module.exports=router;

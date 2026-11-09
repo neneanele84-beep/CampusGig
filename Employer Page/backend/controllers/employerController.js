@@ -1,0 +1,27 @@
+const fs = require('fs');
+const path = require('path');
+const auth = require('../utils/authSecurity');
+const { validateProfile, profileFields } = require('../utils/profileValidation');
+const filePath = path.join(__dirname, '../data/employers.json');
+function readEmployers() { if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, '[]'); return JSON.parse(fs.readFileSync(filePath, 'utf8')); }
+function saveEmployers(rows) { fs.writeFileSync(filePath, JSON.stringify(rows, null, 2)); }
+function readStudents() { const p=path.join(__dirname,'../data/students.json'); return fs.existsSync(p)?JSON.parse(fs.readFileSync(p,'utf8')):[]; }
+function safeEmployer(employer) { const { password, securityAnswerHash, passwordReset, verification, ...safe } = employer; return safe; }
+function registerEmployer(req,res){try{const d=req.body||{};const issue=validateProfile(d,'employer');if(issue)return res.status(400).json({success:false,message:issue});if(!d.password||!d.securityQuestion||!d.securityAnswer)return res.status(400).json({success:false,message:'Complete password and account recovery fields.'});const pw=auth.passwordIssue(d.password);if(pw)return res.status(400).json({success:false,message:pw});if(d.password!==d.confirmPassword)return res.status(400).json({success:false,message:'Passwords do not match.'});if(String(d.securityAnswer).trim().length<2||String(d.securityAnswer).trim().length>100)return res.status(400).json({success:false,message:'Security answer must be between 2 and 100 characters.'});if(!auth.SECURITY_QUESTIONS.some(q=>q.id===d.securityQuestion))return res.status(400).json({success:false,message:'Choose a valid security question.'});const email=auth.normalizeEmail(d.email),employers=readEmployers();if(employers.some(x=>auth.normalizeEmail(x.email)===email)||readStudents().some(x=>auth.normalizeEmail(x.email)===email))return res.status(409).json({success:false,message:'This email is already registered. Please log in instead.'});const employer={id:Date.now().toString(),...profileFields(d),cell:String(d.phone).trim(),password:auth.hashSecret(d.password),securityQuestionId:d.securityQuestion,securityAnswerHash:auth.hashSecret(auth.normalizeAnswer(d.securityAnswer)),emailVerified:false,status:'Active',businessApproved:true};employers.push(employer);saveEmployers(employers);return res.status(201).json({success:true,message:'Employer registered successfully.',employer:auth.publicAccount(employer)});}catch(e){console.error('Employer registration:',e);return res.status(500).json({success:false,message:'Could not register employer.'});}}
+function loginEmployer(req,res){
+  try{
+    const email=auth.normalizeEmail(req.body.email || req.body.identifier); const password=req.body.password;
+    if(!email||!password)return res.status(400).json({success:false,message:'Enter your email address and password.'});
+    if(!auth.isAllowedEmail(email))return res.status(400).json({success:false,message:'Login requires a Gmail or Outlook email address.'});
+    const employers=readEmployers(); const employer=employers.find(e=>auth.normalizeEmail(e.email)===email);
+    if(!employer)return res.status(401).json({success:false,message:'Invalid email or password.'});
+    const valid=String(employer.password||'').startsWith('scrypt$')?auth.verifySecret(password,employer.password):employer.password===password;
+    if(!valid)return res.status(401).json({success:false,message:'Invalid email or password.'});
+    if(!String(employer.password).startsWith('scrypt$')){employer.password=auth.hashSecret(password);saveEmployers(employers);}
+    return res.json({success:true,message:'Login successful.',employer:auth.publicAccount(employer)});
+  }catch(e){console.error('Employer login:',e);return res.status(500).json({success:false,message:'Could not log in.'});}
+}
+function getEmployerFromRequest(req){const id=String(req.body?.id||req.query?.id||'').trim();const email=auth.normalizeEmail(req.body?.email||req.query?.email);return readEmployers().find(e=>(id&&String(e.id)===id)||(email&&auth.normalizeEmail(e.email)===email));}
+function getProfile(req,res){try{const employer=getEmployerFromRequest(req);if(!employer)return res.status(404).json({success:false,message:'Employer not found'});res.json({success:true,employer:safeEmployer(employer)});}catch(e){res.status(500).json({success:false,message:'Server error'});}}
+function updateProfile(req,res){try{const employers=readEmployers(),id=String(req.body.id||'').trim(),index=employers.findIndex(e=>String(e.id)===id);if(index<0)return res.status(404).json({success:false,message:'Employer not found.'});const d={...employers[index],...req.body,phone:req.body.phone||req.body.cell||employers[index].cell};const issue=validateProfile(d,'employer');if(issue)return res.status(400).json({success:false,message:issue});const email=auth.normalizeEmail(d.email);if([...employers.filter((_,i)=>i!==index),...readStudents()].some(x=>auth.normalizeEmail(x.email)===email))return res.status(409).json({success:false,message:'That email address is already in use.'});employers[index]={...employers[index],...profileFields(d),cell:String(d.phone).trim(),company:String(d.company||d.businessName||employers[index].company).trim()};saveEmployers(employers);res.json({success:true,message:'Profile updated successfully.',employer:safeEmployer(employers[index])});}catch(e){res.status(500).json({success:false,message:'Could not save profile.'});}}
+module.exports={registerEmployer,loginEmployer,getProfile,updateProfile};

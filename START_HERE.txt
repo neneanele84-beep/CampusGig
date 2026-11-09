@@ -1,0 +1,36 @@
+CAMPUSGIG - START HERE
+
+1. Open the CampusGig folder in VS Code.
+2. Open Terminal and run:
+   cd "Employer Page\backend"
+   npm install
+3. Copy .env.example to a new file named .env and add your own provider credentials.
+4. Start the backend:
+   npm start
+5. Keep the backend terminal open.
+6. Open Login\Login Page.html with Live Server.
+
+ACCOUNT FLOW
+- Students and employers register separately.
+- Registration accepts Gmail and Outlook-family email addresses only.
+- New accounts must choose a security question and answer.
+- Existing accounts without a recovery question will be asked to set one after their next successful login.
+- Login requires the registered email address and password.
+- Email and phone verification remain required before entering the dashboards.
+- Forgot password verifies the saved security answer before issuing a short-lived reset session.
+
+PASSWORD RULES
+- At least 8 characters.
+- At least one uppercase letter, one lowercase letter and one number.
+- Passwords and security answers are stored as salted scrypt hashes.
+
+EMAIL AND SMS
+- For email testing, use a sender and recipient permitted by your Resend account.
+- For real users, configure a verified sending domain in Resend.
+- Configure Twilio to deliver phone verification codes.
+- For local development only, DEV_OTP_MODE=true prints fallback OTPs in the backend terminal when providers are unavailable. Turn this off for production.
+- Never commit or share your .env file or API credentials.
+
+IMPORTANT
+Do not close the backend terminal while using CampusGig.
+Administration pages and API routes have been removed as requested.
