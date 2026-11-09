@@ -8,13 +8,13 @@
   <div class="brand">Campus<span>Gig</span></div>
   <section class="card">
     <p class="eyebrow">ACCOUNT SECURITY</p><h1>Verify your CampusGig account</h1>
-    <p class="intro">You must verify your email address before you can access your CampusGig account. A one-time password (OTP) is sent to your registered email address only.</p>
+    <p class="intro">Verify your email address to access all CampusGig features. A one-time password (OTP) is sent to your registered email address only.</p>
     <div class="identity"><strong id="accountName">Account</strong><span id="accountEmail">-</span></div>
     <div class="status-grid">
       <article class="status-card"><div><h3>Email</h3><p id="emailStatus">Not Verified</p></div><span id="emailBadge" class="badge no">Not Verified</span></article>
     </div>
     <div class="verify-box" id="emailBox"><h2>Verify email</h2><p>Enter the one-time password sent to the email address you used when creating this account.</p><div class="row"><button id="sendEmail" class="primary">Send email code</button><input id="emailCode" maxlength="6" inputmode="numeric" placeholder="6-digit code"><button id="verifyEmail" class="secondary">Verify</button></div><p id="emailMessage" class="message"></p></div>
-    <div class="actions"><button id="continueBtn" class="continue" disabled>Continue to CampusGig</button><button id="logoutBtn" class="link-btn">Log out</button></div>
+    <div class="actions"><button id="continueBtn" class="continue" disabled>Continue to CampusGig</button><button id="continueUnverifiedBtn" class="link-btn" hidden>Continue without verification</button><button id="logoutBtn" class="link-btn">Log out</button></div>
   </section>
 </main>
 <script src="Verification.js"></script>

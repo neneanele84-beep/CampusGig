@@ -68,10 +68,13 @@ function render(account) {
     user.emailVerified ? 'none' : 'block';
 
   const canContinue =
-    user.emailVerified &&
     user.status !== 'Suspended';
 
-  $('continueBtn').disabled = !canContinue;
+  $('continueBtn').disabled =
+    !user.emailVerified || !canContinue;
+
+  $('continueUnverifiedBtn').hidden =
+    user.emailVerified || !canContinue;
 
   if (user.status === 'Suspended') {
     setMessage(
@@ -81,6 +84,7 @@ function render(account) {
 
     $('emailBox').style.display = 'none';
     $('continueBtn').disabled = true;
+    $('continueUnverifiedBtn').hidden = true;
   }
 }
 
@@ -205,6 +209,12 @@ $('continueBtn').onclick = () => {
     user.emailVerified &&
     user.status !== 'Suspended'
   ) {
+    window.location.href = page;
+  }
+};
+
+$('continueUnverifiedBtn').onclick = () => {
+  if (!user.emailVerified && user.status !== 'Suspended') {
     window.location.href = page;
   }
 };
